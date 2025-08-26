@@ -28,25 +28,6 @@ async function cargarReporte() {
   }
   dataTable = new DataTable("#tabla-reporte");
 
-  // === Gráfica ===
-  let ctx = document.getElementById("grafica").getContext("2d");
-  let labels = data.registros.map(r => r.placa);
-  let valores = data.registros.map(r => r.costo || 0);
-
-  if (chart) {
-    chart.destroy();
-  }
-  chart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: [{
-        label: "Ingresos por vehículo",
-        data: valores,
-        backgroundColor: "rgba(54, 162, 235, 0.6)"
-      }]
-    }
-  });
 }
 
 // cargar reporte al inicio
