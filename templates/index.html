@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Encabezado con fecha, hora y tarifa -->
+<div class="row mb-4 text-center">
+  <div class="col-md-4">
+    <div class="card shadow p-3 rounded-4">
+      <h5>📅 Fecha</h5>
+      <h3>{{ fecha }}</h3>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow p-3 rounded-4">
+      <h5>⏰ Hora</h5>
+      <h3 id="hora"></h3>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow p-3 rounded-4">
+      <h5>💰 Tarifa por hora</h5>
+      <h3>${{ precio }}</h3>
+    </div>
+  </div>
+</div>
+
+<!-- Formulario mejorado -->
+<div class="card shadow-lg p-4 rounded-4">
+  <h3 class="mb-4 text-center fw-bold">🚗 Registro de vehículos</h3>
+  <div class="row g-3 align-items-center">
+    <!-- Input de placa -->
+    <div class="col-md-8">
+      <div class="input-group input-group-lg">
+        <span class="input-group-text bg-dark text-white">🚘</span>
+        <input id="placa" class="form-control" placeholder="Ingrese la placa del vehículo">
+      </div>
+    </div>
+    <!-- Botones -->
+    <div class="col-md-4 d-grid gap-2">
+      <button class="btn btn-success btn-lg" onclick="entrada()">
+        ✅ Registrar Entrada
+      </button>
+      <button class="btn btn-danger btn-lg" onclick="salida()">
+        ❌ Registrar Salida
+      </button>
+      <a href="/reporte-view" class="btn btn-primary btn-lg">
+        📊 Ver Reporte
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Mensaje -->
+<div class="mt-4">
+  <div class="alert text-center" id="mensaje" style="display:none;"></div>
+</div>
+
+<script>
+/* === Reloj en vivo === */
+function actualizarHora() {
+  let ahora = new Date();
+  document.getElementById("hora").textContent =
+    ahora.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}
+setInterval(actualizarHora, 1000);
+actualizarHora();
+
+/* === Funciones de API === */
+async function entrada() {
+  let placa = document.getElementById("placa").value.trim();
+  if (!placa) {
+    mostrarMensaje("⚠️ Debes ingresar una placa", true);
+    return;
+  }
+  let res = await fetch("/entrada", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({placa})
+  });
+  let data = await res.json();
+  mostrarMensaje(data.mensaje || data.error, !!data.error);
+}
+
+async function salida() {
+  let placa = document.getElementById("placa").value.trim();
+  if (!placa) {
+    mostrarMensaje("⚠️ Debes ingresar una placa", true);
+    return;
+  }
+  let res = await fetch("/salida", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({placa})
+  });
+  let data = await res.json();
+  if (data.error) {
+    mostrarMensaje(data.error, true);
+  } else {
+    mostrarMensaje("✅ Salida registrada. Costo: $" + data.costo);
+  }
+}
+
+function mostrarMensaje(texto, error=false) {
+  let div = document.getElementById("mensaje");
+  div.textContent = texto;
+  div.className = error ? "alert alert-danger text-center" : "alert alert-success text-center";
+  div.style.display = "block";
+}
+</script>
+
+{% endblock %}

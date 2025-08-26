@@ -1,0 +1,99 @@
+/* ====== ESTILOS GENERALES ====== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f0f4f8, #d9e4ec);
+  color: #2c3e50;
+  min-height: 100vh;
+}
+
+/* ====== ENCABEZADO PRINCIPAL ====== */
+h1 {
+  font-weight: 700;
+  color: #1a2b49;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+/* ====== CARDS ====== */
+.card {
+  border-radius: 20px;
+  border: none;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* ====== BOTONES ====== */
+.btn {
+  border-radius: 12px;
+  font-weight: 500;
+  padding: 10px 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #28a745, #218838);
+  border: none;
+}
+.btn-success:hover {
+  background: linear-gradient(135deg, #218838, #1e7e34);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #dc3545, #b52a37);
+  border: none;
+}
+.btn-danger:hover {
+  background: linear-gradient(135deg, #b52a37, #a71d2a);
+}
+
+.btn-info {
+  background: linear-gradient(135deg, #17a2b8, #138496);
+  border: none;
+}
+.btn-info:hover {
+  background: linear-gradient(135deg, #138496, #117a8b);
+}
+
+/* ====== TABLAS (DataTables) ====== */
+table.dataTable {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+table.dataTable thead {
+  background: #1a2b49;
+  color: white;
+}
+
+table.dataTable tbody tr:hover {
+  background-color: #f1f7fd !important;
+}
+
+/* ====== ALERTAS ====== */
+.alert {
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+/* ====== GRAFICA (Chart.js) ====== */
+canvas {
+  background: white;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* ====== INPUTS ====== */
+input.form-control {
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  transition: all 0.3s;
+}
+
+input.form-control:focus {
+  border-color: #1a2b49;
+  box-shadow: 0 0 8px rgba(26,43,73,0.3);
+}
