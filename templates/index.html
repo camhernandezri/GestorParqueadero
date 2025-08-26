@@ -23,28 +23,20 @@
   </div>
 </div>
 
-<!-- Formulario mejorado -->
-<div class="card shadow-lg p-4 rounded-4">
+<!-- Formulario -->
+<div class="card shadow-lg p-4 rounded-4 mb-5">
   <h3 class="mb-4 text-center fw-bold">🚗 Registro de vehículos</h3>
   <div class="row g-3 align-items-center">
-    <!-- Input de placa -->
     <div class="col-md-8">
       <div class="input-group input-group-lg">
         <span class="input-group-text bg-dark text-white">🚘</span>
         <input id="placa" class="form-control" placeholder="Ingrese la placa del vehículo">
       </div>
     </div>
-    <!-- Botones -->
     <div class="col-md-4 d-grid gap-2">
-      <button class="btn btn-success btn-lg" onclick="entrada()">
-        ✅ Registrar Entrada
-      </button>
-      <button class="btn btn-danger btn-lg" onclick="salida()">
-        ❌ Registrar Salida
-      </button>
-      <a href="/reporte-view" class="btn btn-primary btn-lg">
-        📊 Ver Reporte
-      </a>
+      <button class="btn btn-success btn-lg" onclick="entrada()">✅ Registrar Entrada</button>
+      <button class="btn btn-danger btn-lg" onclick="salida()">❌ Registrar Salida</button>
+      <button class="btn btn-primary btn-lg" onclick="toggleReporte()">📊 Ver Reporte</button>
     </div>
   </div>
 </div>
@@ -54,7 +46,58 @@
   <div class="alert text-center" id="mensaje" style="display:none;"></div>
 </div>
 
+<!-- Sección de Reporte -->
+<div id="reporte" style="display:none;" class="mt-5">
+  <h3 class="mb-4">📊 Reporte Diario</h3>
+
+  <div class="row mb-4 text-center">
+    <div class="col-md-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <h5 class="card-title">Total Recaudado</h5>
+          <h3 id="total" class="text-success">$0</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <h5 class="card-title">Vehículos Registrados</h5>
+          <h3 id="totalVehiculos">0</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <table class="table table-striped" id="tabla-reporte">
+    <thead>
+      <tr>
+        <th>Placa</th>
+        <th>Entrada</th>
+        <th>Salida</th>
+        <th>Costo</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Gráfica -->
+  <div class="mt-5">
+    <canvas id="grafica"></canvas>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/static/js/reporte.js"></script>
 <script>
+/* === Toggle de Reporte === */
+function toggleReporte() {
+  let div = document.getElementById("reporte");
+  div.style.display = (div.style.display === "none") ? "block" : "none";
+}
+
 /* === Reloj en vivo === */
 function actualizarHora() {
   let ahora = new Date();
@@ -67,10 +110,7 @@ actualizarHora();
 /* === Funciones de API === */
 async function entrada() {
   let placa = document.getElementById("placa").value.trim();
-  if (!placa) {
-    mostrarMensaje("⚠️ Debes ingresar una placa", true);
-    return;
-  }
+  if (!placa) return mostrarMensaje("⚠️ Debes ingresar una placa", true);
   let res = await fetch("/entrada", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
@@ -82,10 +122,7 @@ async function entrada() {
 
 async function salida() {
   let placa = document.getElementById("placa").value.trim();
-  if (!placa) {
-    mostrarMensaje("⚠️ Debes ingresar una placa", true);
-    return;
-  }
+  if (!placa) return mostrarMensaje("⚠️ Debes ingresar una placa", true);
   let res = await fetch("/salida", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
@@ -106,5 +143,4 @@ function mostrarMensaje(texto, error=false) {
   div.style.display = "block";
 }
 </script>
-
 {% endblock %}
