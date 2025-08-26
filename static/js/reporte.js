@@ -1,12 +1,15 @@
+let dataTable = null;
+let chart = null;
+
 async function cargarReporte() {
   let res = await fetch("/reporte");
   let data = await res.json();
 
-  // Total
+  // === Totales ===
   document.getElementById("total").textContent = "$" + data.total_dia;
   document.getElementById("totalVehiculos").textContent = data.registros.length;
 
-  // Tabla con DataTables
+  // === Tabla ===
   let tbody = document.querySelector("#tabla-reporte tbody");
   tbody.innerHTML = "";
   data.registros.forEach(r => {
@@ -18,14 +21,22 @@ async function cargarReporte() {
         <td>${r.costo ?? "-"}</td>
       </tr>`;
   });
-  new DataTable("#tabla-reporte");
 
-  // Gráfica de ingresos
+  // Inicializar o refrescar DataTable
+  if (dataTable) {
+    dataTable.destroy();
+  }
+  dataTable = new DataTable("#tabla-reporte");
+
+  // === Gráfica ===
   let ctx = document.getElementById("grafica").getContext("2d");
   let labels = data.registros.map(r => r.placa);
   let valores = data.registros.map(r => r.costo || 0);
 
-  new Chart(ctx, {
+  if (chart) {
+    chart.destroy();
+  }
+  chart = new Chart(ctx, {
     type: "bar",
     data: {
       labels: labels,
@@ -38,4 +49,8 @@ async function cargarReporte() {
   });
 }
 
+// cargar reporte al inicio
 cargarReporte();
+
+// (Opcional) refrescar cada 5 segundos
+// setInterval(cargarReporte, 5000);
