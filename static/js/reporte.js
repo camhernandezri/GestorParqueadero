@@ -53,4 +53,4 @@ async function cargarReporte() {
 cargarReporte();
 
 // (Opcional) refrescar cada 5 segundos
-// setInterval(cargarReporte, 5000);
+setInterval(cargarReporte, 2000);
